@@ -1,3 +1,4 @@
+use bevy::anti_alias::taa::TemporalAntiAliasing;
 use bevy::prelude::*;
 use bevy::input::mouse::MouseMotion;
 use bevy::window::{CursorGrabMode, CursorOptions, PrimaryWindow};
@@ -36,10 +37,12 @@ impl Default for FpsCamera {
 pub fn setup_camera(
     mut commands: Commands,
 ) { 
-
+    println!("Test");
     commands.spawn((
         Camera3d::default(),
-        Transform::from_xyz(0.0, 80.0, 0.0),
+        Transform::from_xyz(0.0, 0.0, 0.0),
+        TemporalAntiAliasing::default(),
+        Msaa::Off,
         FpsCamera::default(),        
     ));
 }
