@@ -1,8 +1,9 @@
 use std::collections::HashMap;
 
 use bevy::{ecs::system::SystemParam, prelude::*};
+use noise::Perlin;
 
-use crate::{AppState, ChunkPos, world::{spawning::{despawn_chunks, spawn_around_player}, tarrain::TarrainGenerator}};
+use crate::{AppState, ChunkPos, preloader::GameAssets, world::spawning::{despawn_chunks, spawn_around_player}};
 
 pub const CHUNK_SIZE: i32 = 16;
 
@@ -31,4 +32,14 @@ pub struct ChunkParams<'w, 's> {
     pub meshes: ResMut<'w, Assets<Mesh>>,
     pub chunk_map: ResMut<'w, ChunkMap>,
     pub material: ResMut<'w, Assets<StandardMaterial>>,
+    // Die assets für die Chunks
+    pub assets: Res<'w, GameAssets>,
+}
+
+#[derive(Resource)]
+pub struct TarrainGenerator {
+    seed: u32,
+    tarrain_noise: Perlin,
+    detail_noise: Perlin,
+    // Gff. Biom Noise, obwohl das eigentlich woander her kommen sollte denke ich
 }

@@ -1,6 +1,6 @@
 use bevy::{asset::RenderAssetUsages, mesh::Indices, prelude::*};
 
-use crate::{ChunkPos, world::{CHUNK_SIZE, tarrain::TarrainGenerator}};
+use crate::{ChunkPos, world::{CHUNK_SIZE, TarrainGenerator}};
 
 pub fn generate_ground_mesh(
     pos: ChunkPos, 

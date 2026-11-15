@@ -7,6 +7,7 @@ mod world;
 mod preloader;
 mod gui;
 mod player;
+mod vegetation;
 
 #[derive(States, Debug, Clone, PartialEq, Eq, Hash, Default)]
 pub enum AppState {
@@ -60,3 +61,6 @@ fn setup(mut commands: Commands) {
     ));
     commands.insert_resource(ClearColor(Color::srgb(0.3, 0.4, 0.99)));
 }
+
+
+// https://chatgpt.com/c/6afa02ca-1ca4-83eb-98ef-3b195fcfd0ad

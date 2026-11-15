@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::{ChunkPos, player::Player, world::{CHUNK_SIZE, ChunkParams, meshing::generate_ground_mesh, tarrain::TarrainGenerator}};
+use crate::{ChunkPos, player::Player, world::{CHUNK_SIZE, ChunkParams, TarrainGenerator, meshing::generate_ground_mesh}};
 
 const RENDER_DIST: i32 = 20;
 

@@ -25,7 +25,6 @@ const MODEL_NAMES: &[&str] = &[
     "tree_large_1.glb",
     "tree_large_2.glb",
     "tree_large_3.glb",
-
 ];
 
 fn preload_models(

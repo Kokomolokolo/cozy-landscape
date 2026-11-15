@@ -1,13 +1,6 @@
-use bevy::prelude::*;
 use noise::{NoiseFn, Perlin};
 
-#[derive(Resource)]
-pub struct TarrainGenerator {
-    seed: u32,
-    tarrain_noise: Perlin,
-    detail_noise: Perlin,
-    // Gff. Biom Noise, obwohl das eigentlich woander her kommen sollte denke ich
-}
+use crate::world::TarrainGenerator;
 
 impl TarrainGenerator {
     pub fn calculate_surface_height(&self, world_x: f32, world_z: f32) -> f32 {
