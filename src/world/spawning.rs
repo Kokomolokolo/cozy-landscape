@@ -1,9 +1,10 @@
 use bevy::prelude::*;
+use avian3d::prelude::*;
 
 use crate::{ChunkPos, player::Player, world::{CHUNK_SIZE, ChunkParams, TarrainGenerator, meshing::generate_ground_mesh}};
 use crate::vegetation::spawn_trees_for_chunk;
 
-const RENDER_DIST: i32 = 20;
+pub const RENDER_DIST: i32 = 20;
 
 pub fn spawn_around_player(
     mut spawner: ChunkParams,
@@ -37,6 +38,8 @@ pub fn spawn_chunk(
     
     let chunk_mesh = generate_ground_mesh(pos, tarrain_generator);
 
+    let collider = Collider::trimesh_from_mesh(&chunk_mesh).unwrap();
+
     let entity = spawner.commands.spawn((
         Mesh3d(
             spawner.meshes.add(chunk_mesh)
@@ -47,13 +50,15 @@ pub fn spawn_chunk(
                 ..default()
             })
         ),
+        collider,
+        RigidBody::Static,
         Transform::from_translation(
             Vec3::new(
                 pos.0.x as f32 * CHUNK_SIZE as f32, 
                 0.0, 
                 pos.0.y as f32 * CHUNK_SIZE as f32
             )
-        )
+        ),
     )).id();
     spawn_trees_for_chunk(entity, pos, spawner, tarrain_generator);
     spawner.chunk_map.0.insert(pos, entity);

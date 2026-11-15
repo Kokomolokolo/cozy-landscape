@@ -5,7 +5,8 @@ use noise::Perlin;
 
 use crate::{AppState, ChunkPos, preloader::GameAssets, world::spawning::{despawn_chunks, spawn_around_player}};
 
-pub const CHUNK_SIZE: i32 = 16;
+pub const CHUNK_SIZE: i32 = 32;
+pub use spawning::RENDER_DIST;
 
 mod spawning;
 mod meshing;

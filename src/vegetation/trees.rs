@@ -5,6 +5,9 @@ use crate::{
     world::{CHUNK_SIZE, ChunkParams, TarrainGenerator},
 };
 
+#[derive(Component)]
+pub struct  Tree;
+
 pub fn spawn_trees_for_chunk(
     chunk_entity: Entity,
     pos: ChunkPos,
@@ -31,6 +34,7 @@ pub fn spawn_trees_for_chunk(
                         ),
                         Transform::from_translation(local_pos),
                         Visibility::Inherited,
+                        Tree,
                     ));
                 });
             }
@@ -41,4 +45,10 @@ pub fn spawn_trees_for_chunk(
 fn should_spawn_tree(x: f32, z: f32) -> bool {
     // Simulierter Check (kann durch echten Noise-Wert ersetzt werden)
     (x.sin() * z.cos()).abs() > 0.7
+}
+
+pub fn update_tree_lods(
+    
+) {
+    
 }

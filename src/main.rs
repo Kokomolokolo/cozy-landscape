@@ -1,6 +1,7 @@
+use avian3d::PhysicsPlugins;
 use bevy::{diagnostic::FrameTimeDiagnosticsPlugin, prelude::*};
 
-use crate::{camera::CameraPlugin, gui::GUIPlugin, preloader::PreloaderPlugin, world::{CHUNK_SIZE, WorldPlugin}};
+use crate::{camera::CameraPlugin, gui::GUIPlugin, player::PlayerPlugin, preloader::PreloaderPlugin, world::{CHUNK_SIZE, WorldPlugin}};
 
 mod camera;
 mod world;
@@ -21,6 +22,7 @@ fn main() {
         .add_plugins((
             DefaultPlugins,
             FrameTimeDiagnosticsPlugin::default(),
+            PhysicsPlugins::default(),
         ))
         //.add_plugins(TemporalAntiAliasPlugin)
         // .insert_resource(Msaa::Sample4)
@@ -30,6 +32,7 @@ fn main() {
             CameraPlugin, 
             WorldPlugin,
             GUIPlugin,
+            //PlayerPlugin,
         ))
         .add_systems(Startup, setup)
         .run();
