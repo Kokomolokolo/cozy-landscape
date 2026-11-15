@@ -4,6 +4,7 @@ use bevy::input::mouse::MouseMotion;
 use bevy::window::{CursorGrabMode, CursorOptions, PrimaryWindow};
 
 use crate::AppState;
+use crate::player::Player;
 
 pub struct CameraPlugin;
 
@@ -41,9 +42,10 @@ pub fn setup_camera(
     commands.spawn((
         Camera3d::default(),
         Transform::from_xyz(0.0, 0.0, 0.0),
-        TemporalAntiAliasing::default(),
+        // TemporalAntiAliasing::default(),
         Msaa::Off,
-        FpsCamera::default(),        
+        FpsCamera::default(),
+        Player,
     ));
 }
 

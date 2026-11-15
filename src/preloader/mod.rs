@@ -10,6 +10,7 @@ impl Plugin for PreloaderPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(Startup, preload_models);
         app.add_systems(OnEnter(AppState::InGame), spawn_test_asset);
+        app.add_systems(Update, fix_tree_materials_once);
     }
 }
 
@@ -20,6 +21,11 @@ pub struct GameAssets {
 
 const MODEL_NAMES: &[&str] = &[
     "tree_pack.glb",
+    "tree_large_0.glb",
+    "tree_large_1.glb",
+    "tree_large_2.glb",
+    "tree_large_3.glb",
+
 ];
 
 fn preload_models(
@@ -50,9 +56,28 @@ fn spawn_test_asset(
     println!("Test2");
     commands.spawn((
         WorldAssetRoot(
-            game_assets.assets.get("tree_pack.glb").unwrap().clone()
+            game_assets.assets.get("tree_large_0.glb").unwrap().clone()
         ),
         Transform::from_xyz(0.0, -0.4, 0.0)
             .with_scale(Vec3::splat(1.0)),
     ));
+}
+
+// Das hat sehr viel gebracht
+pub fn fix_tree_materials_once(
+    mut materials: ResMut<Assets<StandardMaterial>>,
+    // Wir triggern, sobald neue StandardMaterials hinzugefügt werden
+    mut added_materials: MessageReader<AssetEvent<StandardMaterial>>,
+) {
+    for event in added_materials.read() {
+        if let AssetEvent::Added { id } = event {
+            if let Some(mut material) = materials.get_mut(*id) {
+                // Wenn das Material eine Textur hat (typisch für Blätter/Rinde)
+                if material.base_color_texture.is_some() {
+                    material.alpha_mode = AlphaMode::Mask(0.5);
+                    material.double_sided = true; // Hilft oft bei dünnen Blättern
+                }
+            }
+        }
+    }
 }
