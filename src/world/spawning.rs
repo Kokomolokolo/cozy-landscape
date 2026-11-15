@@ -1,6 +1,7 @@
 use bevy::prelude::*;
 
 use crate::{ChunkPos, player::Player, world::{CHUNK_SIZE, ChunkParams, TarrainGenerator, meshing::generate_ground_mesh}};
+use crate::vegetation::spawn_trees_for_chunk;
 
 const RENDER_DIST: i32 = 20;
 
@@ -54,6 +55,7 @@ pub fn spawn_chunk(
             )
         )
     )).id();
+    spawn_trees_for_chunk(entity, pos, spawner, tarrain_generator);
     spawner.chunk_map.0.insert(pos, entity);
 }
 

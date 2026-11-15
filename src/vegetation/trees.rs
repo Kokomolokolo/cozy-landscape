@@ -22,14 +22,17 @@ pub fn spawn_trees_for_chunk(
                 // Lokal, da es ein Kind des Chunks wird
                 let local_pos = Vec3::new(x as f32, y, z as f32);
 
-                let tree_mesh = spawner.assets.assets.get("tree_large_3.glb");
+                let tree_mesh = spawner.assets.assets.get("tree_large_3.glb").unwrap().clone();
 
-                spawner
-                    .commands
-                    .entity(chunk_entity)
-                    .with_children(|parent| {
-                        parent.spawn(());
-                    });
+                spawner.commands.entity(chunk_entity).with_children(|parent| {
+                    parent.spawn((
+                        WorldAssetRoot(
+                            tree_mesh
+                        ),
+                        Transform::from_translation(local_pos),
+                        Visibility::Inherited,
+                    ));
+                });
             }
         }
     }
