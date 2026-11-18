@@ -1,10 +1,10 @@
 use bevy::{asset::RenderAssetUsages, mesh::Indices, prelude::*};
 
-use crate::{ChunkPos, world::{CHUNK_SIZE, TarrainGenerator}};
+use crate::{ChunkPos, world::{CHUNK_SIZE, TarrainGenerator, biomes::Biome}};
 
 pub fn generate_ground_mesh(
     pos: ChunkPos, 
-    tarrain_generator: &Res<TarrainGenerator>,
+    tarrain_generator: &TarrainGenerator,
 ) -> Mesh {
     let mut positions = Vec::new();
     let mut normals = Vec::new();
@@ -23,7 +23,8 @@ pub fn generate_ground_mesh(
             let world_z = chunk_offset.y + z as f32;
 
             let get_height = |wx: f32, wz: f32| -> f32 {
-                tarrain_generator.calculate_surface_height(wx, wz)
+                let (height, biom) = tarrain_generator.get_height_and_biom(wx, wz);
+                height
             };
 
             // Höhen für die Vertecies

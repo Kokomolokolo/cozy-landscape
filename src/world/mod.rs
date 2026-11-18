@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use bevy::{ecs::system::SystemParam, prelude::*};
 use noise::Perlin;
 
-use crate::{AppState, ChunkPos, preloader::GameAssets, world::spawning::{despawn_chunks, spawn_around_player}};
+use crate::{AppState, ChunkPos, preloader::GameAssets, world::{biomes::BiomeRegistry, spawning::{ChunkTasks, despawn_chunks, handle_spawn_tasks, spawn_around_player}}};
 
 pub const CHUNK_SIZE: i32 = 32;
 pub use spawning::RENDER_DIST;
@@ -11,6 +11,7 @@ pub use spawning::RENDER_DIST;
 mod spawning;
 mod meshing;
 mod tarrain;
+mod biomes;
 
 pub struct WorldPlugin;
 
@@ -18,7 +19,8 @@ impl Plugin for WorldPlugin {
     fn build(&self, app: &mut App) {
         app.init_resource::<ChunkMap>();
         app.init_resource::<TarrainGenerator>();
-        app.add_systems(Update, (spawn_around_player).run_if(in_state(AppState::InGame)));
+        app.init_resource::<ChunkTasks>();
+        app.add_systems(Update, (spawn_around_player, handle_spawn_tasks).run_if(in_state(AppState::InGame)));
         app.add_systems(Update, (despawn_chunks).run_if(in_state(AppState::InGame)));
     }
 }
@@ -37,10 +39,11 @@ pub struct ChunkParams<'w, 's> {
     pub assets: Res<'w, GameAssets>,
 }
 
-#[derive(Resource)]
+#[derive(Resource, Clone)]
 pub struct TarrainGenerator {
-    seed: u32,
+    pub seed: u32,
     tarrain_noise: Perlin,
-    detail_noise: Perlin,
-    // Gff. Biom Noise, obwohl das eigentlich woander her kommen sollte denke ich
+    pub detail_noise: Perlin,
+    biom_noise: Perlin,
+    registry: BiomeRegistry,
 }

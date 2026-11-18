@@ -1,7 +1,8 @@
 use bevy::prelude::*;
+use noise::NoiseFn;
 
 use crate::{
-    ChunkPos, player::Player, world::{CHUNK_SIZE, ChunkParams, TarrainGenerator},
+    ChunkPos, player::Player, vegetation::hash2d, world::{CHUNK_SIZE, ChunkParams, TarrainGenerator},
 };
 
 #[derive(Component)]
@@ -18,8 +19,8 @@ pub fn spawn_trees_for_chunk(
             let world_x = pos.0.x as f32 * CHUNK_SIZE as f32 + x as f32;
             let world_z = pos.0.y as f32 * CHUNK_SIZE as f32 + z as f32;
 
-            if should_spawn_tree(world_x, world_z) {
-                let y = tarrain_generator.calculate_surface_height(world_x, world_z);
+            if should_spawn_tree(world_x, world_z, tarrain_generator.seed) {
+                let (y, _biome) = tarrain_generator.get_height_and_biom(world_x, world_z);
 
                 // Lokal, da es ein Kind des Chunks wird
                 let local_pos = Vec3::new(x as f32, y, z as f32);
@@ -60,10 +61,14 @@ pub fn spawn_trees_for_chunk(
     }
 }
 
-fn should_spawn_tree(x: f32, z: f32) -> bool {
+fn should_spawn_tree(x: f32, z: f32, seed: u32) -> bool {
     // Simulierter Check (kann durch echten Noise-Wert ersetzt werden)
-    (x.sin() * z.cos()).abs() > 0.99
+    let random_number = hash2d(x as i32, z as i32, seed);
+
+    random_number < 0.1 
+    //(x.sin() * z.cos()).abs() > 0.99
 }
+
 
 pub fn update_tree_lods(
     q_player: Query<&Transform, With<Player>>,

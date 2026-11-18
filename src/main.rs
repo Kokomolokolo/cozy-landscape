@@ -24,12 +24,13 @@ fn main() {
             FrameTimeDiagnosticsPlugin::default(),
             PhysicsPlugins::default(),
         ))
+        // .insert_resource(Time::<Fixed>::from_seconds(1.0))
         //.add_plugins(TemporalAntiAliasPlugin)
         // .insert_resource(Msaa::Sample4)
         .init_state::<AppState>()
         .add_plugins((
             PreloaderPlugin, 
-            // CameraPlugin, 
+            //CameraPlugin, 
             WorldPlugin,
             GUIPlugin,
             VegetationPlugin,
